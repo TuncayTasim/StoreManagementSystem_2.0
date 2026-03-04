@@ -1,0 +1,21 @@
+## [Our specific secrets]
+StoreManagementSystem.API/appsettings.json
+StoreManagementSystem.API/appsettings.Development.json
+*.txt
+*.log
+
+## [Standard .NET ignores]
+bin/
+obj/
+.vs/
+.user
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## [OS and Tooling]
+.DS_Store
+.idea/
+.vscode/
+.gemini/tmp/
