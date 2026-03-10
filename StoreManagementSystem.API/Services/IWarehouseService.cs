@@ -6,7 +6,7 @@ namespace StoreManagementSystem.API.Services
 {
     public interface IWarehouseService
     {
-        Task RestockProductAsync(int productId, int quantity, decimal price, int daysToExpire);
+        Task RestockProductAsync(int productId, decimal quantity, decimal price, int daysToExpire);
         Task RejectWarehouseBatchAsync(int warehouseId, string reason);
         Task<IEnumerable<Warehouse>> GetHistoryAsync(int productId);
         Task<IEnumerable<Warehouse>> GetAllHistoryAsync(int? productId = null);

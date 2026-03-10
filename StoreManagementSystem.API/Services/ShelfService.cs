@@ -66,21 +66,20 @@ namespace StoreManagementSystem.API.Services
             return await _repository.GetAllHistoryAsync(productId);
         }
 
-        public async Task MoveToShelfAsync(int productId, int quantity, decimal sellPrice)
+        public async Task MoveToShelfAsync(int productId, decimal quantity, decimal sellPrice)
         {
             var product = await _productRepository.GetByIdAsync(productId);
-            if (product == null || product.WarehouseQuantity < quantity) 
+            if (product == null || product.WarehouseQuantity < quantity)
                 throw new Exception("Product not found or insufficient warehouse quantity");
 
-            int remainingToMove = quantity;
+            decimal remainingToMove = quantity;
             var batches = await _warehouseRepository.GetAvailableBatchesAsync(productId);
 
             foreach (var batch in batches)
             {
                 if (remainingToMove <= 0) break;
 
-                int take = Math.Min(batch.CurrentQuantity, remainingToMove);
-                
+                decimal take = Math.Min(batch.CurrentQuantity, remainingToMove);                
                 batch.CurrentQuantity -= take;
                 remainingToMove -= take;
 

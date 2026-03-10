@@ -33,7 +33,7 @@ namespace StoreManagementSystem.API.Services
                 RoleId = dto.RoleId,
                 StatusId = 2,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                PhoneNumber = "",
+                PhoneNumber = dto.PhoneNumber,
                 ActionToken = Guid.NewGuid().ToString().Substring(0, 8)
             };
 

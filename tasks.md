@@ -1,6 +1,6 @@
 # Active Task
-- [ ] Add an endpoint to fetch the Absolute Total of all sales.
+- [] After certain time log out from the account. Make expiration session
 
 # Backlog
-- [ ] Add pagination to the Sales History frontend table.
-- [ ] Create an endpoint to bulk-reject expired warehouse inventory.
+- [] Make sure that warehouse front end tracks not only the props from warehouse table, but also the buy price from warehosue restock table. DO NOT make any migrations. Use the existing data in the warehouse and warehouse restock tables
+- [] 

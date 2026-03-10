@@ -5,7 +5,7 @@ namespace StoreManagementSystem.API.Services
 {
     public interface ISalesService
     {
-        Task ProcessSaleAsync(int productId, int quantity, string paymentMethod);
+        Task ProcessSaleAsync(int productId, decimal quantity, string paymentMethod);
         Task<IEnumerable<Sale>> GetAllSalesAsync(int? productId = null);
     }
 
@@ -22,20 +22,20 @@ namespace StoreManagementSystem.API.Services
             _productRepository = productRepository;
         }
 
-        public async Task ProcessSaleAsync(int productId, int quantity, string paymentMethod)
+        public async Task ProcessSaleAsync(int productId, decimal quantity, string paymentMethod)
         {
             var product = await _productRepository.GetByIdAsync(productId);
             if (product == null || product.ShelfQuantity < quantity)
                 throw new Exception("Product not found or insufficient shelf quantity");
 
-            int remainingToSell = quantity;
+            decimal remainingToSell = quantity;
             var batches = await _shelfRepository.GetAvailableBatchesAsync(productId);
 
             foreach (var batch in batches)
             {
                 if (remainingToSell <= 0) break;
 
-                int take = Math.Min(batch.CurrentQuantity, remainingToSell);
+                decimal take = Math.Min(batch.CurrentQuantity, remainingToSell);
                 
                 batch.CurrentQuantity -= take;
                 remainingToSell -= take;

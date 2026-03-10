@@ -16,8 +16,8 @@ namespace StoreManagementSystem.API.Models
         public int ProductId { get; set; }
         public Product? Product { get; set; }
 
-        public int Quantity { get; set; }
-        public int CurrentQuantity { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal CurrentQuantity { get; set; }
         public DateTime ActionDateTime { get; set; } = DateTime.Now;
 
         public ShelfRestock? RestockDetails { get; set; }

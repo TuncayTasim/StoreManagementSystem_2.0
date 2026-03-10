@@ -12,12 +12,28 @@ namespace StoreManagementSystem.API.Controllers
         private readonly IWarehouseService _warehouseService;
         private readonly IShelfService _shelfService;
         private readonly ISalesService _salesService;
+        private readonly IRejectionService _rejectionService;
 
-        public InventoryController(IWarehouseService warehouseService, IShelfService shelfService, ISalesService salesService)
+        public InventoryController(IWarehouseService warehouseService, IShelfService shelfService, ISalesService salesService, IRejectionService rejectionService)
         {
             _warehouseService = warehouseService;
             _shelfService = shelfService;
             _salesService = salesService;
+            _rejectionService = rejectionService;
+        }
+
+        [HttpGet("rejections")]
+        public async Task<IActionResult> GetRejections()
+        {
+            try
+            {
+                var rejections = await _rejectionService.GetAllRejectionsAsync();
+                return Ok(rejections);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("warehouse/history")]
@@ -49,12 +65,12 @@ namespace StoreManagementSystem.API.Controllers
         }
 
         [HttpPost("restock")]
-        public async Task<IActionResult> Restock(int productId, int quantity, decimal price, int daysToExpire)
+        public async Task<IActionResult> Restock(int productId, decimal quantity, decimal price, int daysToExpire)
         {
             try
             {
                 await _warehouseService.RestockProductAsync(productId, quantity, price, daysToExpire);
-                return Ok("Restock successful");
+                return Ok("Product restocked in warehouse.");
             }
             catch (Exception ex)
             {
@@ -63,12 +79,13 @@ namespace StoreManagementSystem.API.Controllers
         }
 
         [HttpPost("move-to-shelf")]
-        public async Task<IActionResult> MoveToShelf(int productId, int quantity, decimal sellPrice)
+        [Authorize(Roles = "Admin,Shelf Manager")]
+        public async Task<IActionResult> MoveToShelf(int productId, decimal quantity, decimal sellPrice)
         {
             try
             {
                 await _shelfService.MoveToShelfAsync(productId, quantity, sellPrice);
-                return Ok("Move to shelf successful");
+                return Ok("Product moved to shelf.");
             }
             catch (Exception ex)
             {
@@ -77,7 +94,8 @@ namespace StoreManagementSystem.API.Controllers
         }
 
         [HttpPost("sell")]
-        public async Task<IActionResult> Sell(int productId, int quantity, string paymentMethod)
+        [Authorize(Roles = "Admin,Sales Manager")]
+        public async Task<IActionResult> Sell(int productId, decimal quantity, string paymentMethod)
         {
             try
             {
