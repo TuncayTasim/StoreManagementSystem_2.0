@@ -12,22 +12,22 @@ namespace StoreManagementSystem.Tests
     public class AuthServiceTests
     {
         private readonly Mock<IAuthRepository> _mockRepo;
-        private readonly Mock<IEmailService> _mockEmail;
         private readonly Mock<IConfiguration> _mockConfig;
         private readonly AuthService _service;
 
         public AuthServiceTests()
         {
             _mockRepo = new Mock<IAuthRepository>();
-            _mockEmail = new Mock<IEmailService>();
             _mockConfig = new Mock<IConfiguration>();
             
             _mockConfig.Setup(c => c["Jwt:Key"]).Returns("TestKey1234567890123456789012345");
-            _service = new AuthService(_mockRepo.Object, _mockConfig.Object, _mockEmail.Object);
+            _mockConfig.Setup(c => c["EmailSettings:Password"]).Returns("test");
+            
+            _service = new AuthService(_mockRepo.Object, _mockConfig.Object);
         }
 
         [Fact]
-        public async Task RegisterAsync_AddsUserAndSendsEmail()
+        public async Task RegisterAsync_AddsUserAndReturnsConfirmationToken()
         {
             // Arrange
             var dto = new UserRegisterDTO { UserName = "new", Email = "e@test.com", Password = "pw", FirstName = "F", LastName = "L", RoleId = 1 };
@@ -40,7 +40,6 @@ namespace StoreManagementSystem.Tests
             Assert.NotNull(result);
             Assert.Equal("CONFIRMATION_SENT", result.Token);
             _mockRepo.Verify(r => r.AddUserAsync(It.IsAny<User>()), Times.Once);
-            _mockEmail.Verify(e => e.SendEmailAsync("e@test.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -70,3 +69,4 @@ namespace StoreManagementSystem.Tests
         }
     }
 }
+

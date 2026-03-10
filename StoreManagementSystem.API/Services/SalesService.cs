@@ -37,26 +37,23 @@ namespace StoreManagementSystem.API.Services
 
                 int take = Math.Min(batch.CurrentQuantity, remainingToSell);
                 
-                // Update original shelf batch remaining amount
                 batch.CurrentQuantity -= take;
                 remainingToSell -= take;
 
-                // 1. Record NEGATIVE Shelf Action (Ledger entry for the sale)
                 var shelfSellAction = new Shelf
                 {
                     ProductId = productId,
-                    ActionId = 3, // Sell
+                    ActionId = 3, 
                     Quantity = -take,
-                    CurrentQuantity = batch.CurrentQuantity, // snapshot of what is left in THIS shelf batch
+                    CurrentQuantity = batch.CurrentQuantity, 
                     ActionDateTime = DateTime.Now
                 };
                 await _shelfRepository.AddActionAsync(shelfSellAction);
 
-                // 2. Record Sale entry with specific batch price
                 decimal price = batch.RestockDetails?.PriceSell ?? 0;
                 var sale = new Sale
                 {
-                    ShelfId = batch.Id, // Linking to the original MoveToShelf record that provided stock
+                    ShelfId = batch.Id, 
                     QuantitySold = take,
                     PaymentMethod = paymentMethod,
                     PriceSold = price
@@ -64,7 +61,6 @@ namespace StoreManagementSystem.API.Services
                 await _repository.AddSaleAsync(sale);
             }
 
-            // Update Product-wide totals
             product.ShelfQuantity -= quantity;
             await _productRepository.UpdateAsync(product);
 

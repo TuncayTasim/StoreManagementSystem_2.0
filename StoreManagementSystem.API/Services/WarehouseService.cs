@@ -26,7 +26,6 @@ namespace StoreManagementSystem.API.Services
             if (product == null)
                 throw new Exception("Associated product not found.");
 
-            // 1. Create Rejection Record
             var rejection = new Rejection
             {
                 WarehouseId = batch.Id,
@@ -34,25 +33,21 @@ namespace StoreManagementSystem.API.Services
             };
             await _rejectionRepository.AddRejectionAsync(rejection);
 
-            // 2. Create Rejection Ledger Entry
             var rejectionAction = new Warehouse
             {
                 ProductId = batch.ProductId,
-                ActionId = 4, // Reject
+                ActionId = 4, 
                 Quantity = -batch.CurrentQuantity,
-                CurrentQuantity = 0, // Now empty
+                CurrentQuantity = 0, 
                 ActionDateTime = DateTime.Now,
             };
             await _repository.AddActionAsync(rejectionAction);
 
-            // 3. Update Product & Batch Quantities
             product.WarehouseQuantity -= batch.CurrentQuantity;
-            batch.CurrentQuantity = 0; // Zero out the original batch
 
             await _productRepository.UpdateAsync(product);
             await _repository.UpdateAsync(batch);
 
-            // 4. Save
             await _repository.SaveChangesAsync();
             await _productRepository.SaveChangesAsync();
             await _rejectionRepository.SaveChangesAsync();
@@ -70,9 +65,9 @@ namespace StoreManagementSystem.API.Services
             var action = new Warehouse
             {
                 ProductId = productId,
-                ActionId = 1, // Restock
+                ActionId = 1,
                 Quantity = quantity,
-                CurrentQuantity = quantity, // Tracking remaining in this batch
+                CurrentQuantity = quantity,
                 ActionDateTime = DateTime.Now,
                 RestockDetails = new WarehouseRestock
                 {

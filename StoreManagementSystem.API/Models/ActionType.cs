@@ -7,6 +7,6 @@ namespace StoreManagementSystem.API.Models
         [Key]
         public int ActionId { get; set; }
         [Required]
-        public string Name { get; set; } = string.Empty; // e.g., Restock, MoveToShelf, Reject, Sell
+        public string Name { get; set; } = string.Empty;
     }
 }

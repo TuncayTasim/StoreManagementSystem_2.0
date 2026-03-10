@@ -41,7 +41,6 @@ namespace StoreManagementSystem.API.Controllers
             }
             catch (Exception ex)
             {
-                // Custom check for specific message handled by frontend
                 if (ex.Message == "EMAIL_NOT_CONFIRMED")
                 {
                     return BadRequest("EMAIL_NOT_CONFIRMED");

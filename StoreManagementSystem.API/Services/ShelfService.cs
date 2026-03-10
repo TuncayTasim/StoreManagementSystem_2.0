@@ -28,7 +28,6 @@ namespace StoreManagementSystem.API.Services
             if (product == null)
                 throw new Exception("Associated product not found.");
 
-            // 1. Create Rejection Record
             var rejection = new Rejection
             {
                 ShelfId = batch.Id,
@@ -36,25 +35,22 @@ namespace StoreManagementSystem.API.Services
             };
             await _rejectionRepository.AddRejectionAsync(rejection);
 
-            // 2. Create Rejection Ledger Entry
             var rejectionAction = new Shelf
             {
                 ProductId = batch.ProductId,
-                ActionId = 4, // Reject
+                ActionId = 4,
                 Quantity = -batch.CurrentQuantity,
                 CurrentQuantity = 0,
                 ActionDateTime = DateTime.Now,
             };
             await _repository.AddActionAsync(rejectionAction);
 
-            // 3. Update Product & Batch
             product.ShelfQuantity -= batch.CurrentQuantity;
             batch.CurrentQuantity = 0;
 
             await _productRepository.UpdateAsync(product);
             await _repository.UpdateAsync(batch);
 
-            // 4. Save
             await _repository.SaveChangesAsync();
             await _productRepository.SaveChangesAsync();
             await _rejectionRepository.SaveChangesAsync();
@@ -85,28 +81,25 @@ namespace StoreManagementSystem.API.Services
 
                 int take = Math.Min(batch.CurrentQuantity, remainingToMove);
                 
-                // Update original warehouse batch remaining amount
                 batch.CurrentQuantity -= take;
                 remainingToMove -= take;
 
-                // 1. Record NEGATIVE Warehouse Action (Ledger entry for the move out)
                 var warehouseMoveAction = new Warehouse
                 {
                     ProductId = productId,
-                    ActionId = 2, // MoveToShelf
+                    ActionId = 2,
                     Quantity = -take,
-                    CurrentQuantity = batch.CurrentQuantity, // snapshot of what is left in THIS batch
+                    CurrentQuantity = batch.CurrentQuantity,
                     ActionDateTime = DateTime.Now
                 };
                 await _warehouseRepository.AddActionAsync(warehouseMoveAction);
 
-                // 2. Record POSITIVE Shelf Action (New stock pool on shelf)
                 var shelfAction = new Shelf
                 {
                     ProductId = productId,
-                    ActionId = 2, // MoveToShelf
+                    ActionId = 2,
                     Quantity = take,
-                    CurrentQuantity = take, // Tracking remaining in this shelf batch
+                    CurrentQuantity = take,
                     ActionDateTime = DateTime.Now,
                     RestockDetails = new ShelfRestock
                     {
@@ -116,7 +109,6 @@ namespace StoreManagementSystem.API.Services
                 await _repository.AddActionAsync(shelfAction);
             }
 
-            // Update Product-wide totals
             product.WarehouseQuantity -= quantity;
             product.ShelfQuantity += quantity;
             
