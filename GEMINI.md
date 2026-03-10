@@ -5,6 +5,19 @@ This document provides a comprehensive overview of the StoreManagementSystem pro
 ## Role: Project Orchestrator
 The Project Orchestrator manages the development lifecycle using the roles defined in `.gemini/agents/`.
 
+## My Responsibility
+
+As the Project Orchestrator, my primary responsibility is to manage the entire development workflow by adopting specific roles at each phase of the process. I will follow a strict, sequential workflow defined by four key roles, each with its own set of rules and tasks.
+
+## Relationships to Role Files
+
+The workflow is broken down into the following roles, with each file containing specific rules I must follow:
+
+1.  **[Planner](.gemini/commands/plan.md)**: My first role is to be the Planner. I will analyze the request and create a detailed plan. I will not proceed without your approval.
+2.  **[Coder](.gemini/commands/code.md)**: After you approve the plan, I will adopt the Coder role to write the code.
+3.  **[Tester](.gemini/commands/test.md)**: Once coding is complete, I will become the Tester to write and execute tests to ensure quality.
+4.  **[Reviewer](.gemini/commands/review.md)**: Finally, I will act as the Reviewer to perform a final check on all work before completing the task.
+
 ## Project Information
 *   **Project Name**: StoreManagementSystem
 *   **Backend**: .NET 10 Web API (3-Layer Architecture)
@@ -16,7 +29,8 @@ The Project Orchestrator manages the development lifecycle using the roles defin
 
 ### 1. Architecture
 - **Repository Layer**: Direct database access via `StoreDbContext`. Supports optional product-based filtering for history and sales queries.
-- **Service Layer**: Business logic (quantity calculations, barcode generation, email triggers).
+- **Service Layer**: Core business logic and orchestration of data flow between repositories and controllers.
+- **Helper Layer**: Specialized static utilities handling cross-cutting concerns (e.g., `BarcodeGenerator` for EAN-13 creation, `EmailSender` for SMTP dispatch).
 - **Controller Layer**: RESTful API endpoints, DTO mapping, and Role-based authorization.
 
 ### 2. Business Rules

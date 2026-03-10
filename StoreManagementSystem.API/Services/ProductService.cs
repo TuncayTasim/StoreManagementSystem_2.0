@@ -1,3 +1,4 @@
+using StoreManagementSystem.API.Helpers;
 using StoreManagementSystem.API.Models;
 using StoreManagementSystem.API.Repositories;
 
@@ -15,12 +16,10 @@ namespace StoreManagementSystem.API.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _repository;
-        private readonly IBarcodeService _barcodeService;
 
-        public ProductService(IProductRepository repository, IBarcodeService barcodeService)
+        public ProductService(IProductRepository repository)
         {
             _repository = repository;
-            _barcodeService = barcodeService;
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
@@ -37,7 +36,7 @@ namespace StoreManagementSystem.API.Services
         {
             if (string.IsNullOrEmpty(product.Barcode))
             {
-                product.Barcode = _barcodeService.GenerateEan13();
+                product.Barcode = BarcodeGenerator.GenerateEan13();
             }
             await _repository.AddAsync(product);
             await _repository.SaveChangesAsync();

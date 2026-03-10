@@ -55,17 +55,14 @@ function updateNav() {
             <li class="nav-item"><a class="nav-link" href="#" onclick="showInventory()">Inventory</a></li>
         `;
 
-        // Admin (1) or Sales Manager (4)
         if (roleId === 1 || roleId === 4) {
             links += `<li class="nav-item"><a class="nav-link" href="#" onclick="showSales()">Sales History</a></li>`;
         }
 
-        // Admin (1) or Warehouse Manager (3)
         if (roleId === 1 || roleId === 3) {
             links += `<li class="nav-item"><a class="nav-link" href="#" onclick="showWarehouseLogs()">Warehouse Logs</a></li>`;
         }
 
-        // Admin (1) or Shelf Manager (2)
         if (roleId === 1 || roleId === 2) {
             links += `<li class="nav-item"><a class="nav-link" href="#" onclick="showShelfLogs()">Shelf Logs</a></li>`;
         }
@@ -136,11 +133,13 @@ function showLogin() {
                 showDashboard();
             } else {
                 if (response.status === 400) {
-                    const errorJson = await response.json();
-                    if (errorJson.message === "EMAIL_NOT_CONFIRMED") {
+                    const errorText = await response.text();
+                    if (errorText.includes("EMAIL_NOT_CONFIRMED")) {
                         showConfirmEmail();
                         return;
                     }
+                    await showErrorAlert(errorText, 'Login failed');
+                    return;
                 }
                 await showErrorAlert(response, 'Login failed');
             }
@@ -227,7 +226,8 @@ function showRegister() {
                 await showErrorAlert(response, 'Registration failed');
             }
         } catch (err) {
-            alert('Error connecting to server.');
+            console.error(err);
+            alert('Error connecting to server: ' + err.message);
         }
     });
 }
@@ -480,3 +480,151 @@ function showAddProduct() {
         if (res.ok) showProducts(); else await showErrorAlert(res, 'Save failed');
     });
 }
+
+function showConfirmEmail() {
+    const content = document.getElementById('content');
+    content.innerHTML = `
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Confirm Email</h3>
+                        <p class="text-center">Please enter the activation token sent to your email.</p>
+                        <form id="confirmForm">
+                            <div class="mb-3">
+                                <label class="form-label">Activation Token</label>
+                                <input type="text" id="confirmToken" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Confirm</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('confirmForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const token = document.getElementById('confirmToken').value;
+
+        try {
+            const response = await fetch(`${API_URL}/auth/confirm?token=${encodeURIComponent(token)}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                alert('Email confirmed successfully! You can now login.');
+                showLogin();
+            } else {
+                await showErrorAlert(response, 'Confirmation failed');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error connecting to server: ' + err.message);
+        }
+    });
+}
+
+function showForgotPassword() {
+    const content = document.getElementById('content');
+    content.innerHTML = `
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Forgot Password</h3>
+                        <form id="forgotForm">
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" id="forgotEmail" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-warning w-100">Send Reset Link</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <p><a href="#" onclick="showLogin()">Back to Login</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('forgotForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('forgotEmail').value;
+
+        try {
+            const response = await fetch(`${API_URL}/auth/forgot-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+
+            if (response.ok) {
+                alert('Reset link sent to your email.');
+                showResetPassword();
+            } else {
+                await showErrorAlert(response, 'Failed to send reset link');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error connecting to server: ' + err.message);
+        }
+    });
+}
+
+function showResetPassword() {
+    const content = document.getElementById('content');
+    content.innerHTML = `
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Reset Password</h3>
+                        <form id="resetForm">
+                            <div class="mb-3">
+                                <label class="form-label">Reset Token</label>
+                                <input type="text" id="resetToken" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">New Password</label>
+                                <input type="password" id="resetPass" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" id="resetConfirm" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('resetForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const token = document.getElementById('resetToken').value;
+        const newPassword = document.getElementById('resetPass').value;
+        const confirmPassword = document.getElementById('resetConfirm').value;
+
+        try {
+            const response = await fetch(`${API_URL}/auth/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, newPassword, confirmPassword })
+            });
+
+            if (response.ok) {
+                alert('Password reset successfully! You can now login.');
+                showLogin();
+            } else {
+                await showErrorAlert(response, 'Reset failed');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error connecting to server: ' + err.message);
+        }
+    });
+}
+

@@ -9,14 +9,12 @@ namespace StoreManagementSystem.Tests
     public class ProductServiceTests
     {
         private readonly Mock<IProductRepository> _mockRepo;
-        private readonly Mock<IBarcodeService> _mockBarcodeService;
         private readonly ProductService _service;
 
         public ProductServiceTests()
         {
             _mockRepo = new Mock<IProductRepository>();
-            _mockBarcodeService = new Mock<IBarcodeService>();
-            _service = new ProductService(_mockRepo.Object, _mockBarcodeService.Object);
+            _service = new ProductService(_mockRepo.Object);
         }
 
         [Fact]
@@ -39,15 +37,16 @@ namespace StoreManagementSystem.Tests
         {
             // Arrange
             var product = new Product { Name = "New" };
-            _mockBarcodeService.Setup(s => s.GenerateEan13()).Returns("3800000000007");
 
             // Act
             await _service.CreateProductAsync(product);
 
             // Assert
-            Assert.Equal("3800000000007", product.Barcode);
+            Assert.NotNull(product.Barcode);
+            Assert.Equal(13, product.Barcode.Length);
             _mockRepo.Verify(r => r.AddAsync(product), Times.Once);
             _mockRepo.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
     }
 }
+

@@ -6,7 +6,7 @@ A comprehensive store management application built with a .NET Web API backend a
 
 - **User Authentication**: Secure login and registration with hashed passwords. Includes a "Forgot Password" feature allowing users to securely reset their credentials. Users can register as **Admin**, **Shelf Manager**, **Warehouse Manager**, or **Sales Manager**.
 - **Role-Based Access Control (RBAC)**: Interface and actions are restricted based on user role (Admin has full access, Managers have access to their respective departments).
-- **Email Confirmation & Services**: SMTP integration via `tuncaytasim24@gmail.com` using `MailKit`. Users must confirm their email using a token sent to them. This token mechanism is also used for securely resetting forgotten passwords.
+- **Email Confirmation & Helpers**: SMTP integration via `tuncaytasim24@gmail.com` using `MailKit`. Users must confirm their email using a token sent to them. This token mechanism is also used for securely resetting forgotten passwords. Email and Barcode functionalities are built cleanly as modular static classes within the `Helpers` layer.
 - **Inventory Management**:
     - **Automatic Barcode Generation**: EAN-13 barcodes generated automatically for new products (prefix 380).
     - **Warehouse Tracking**: Manage bulk stock and restocking operations.
@@ -18,7 +18,7 @@ A comprehensive store management application built with a .NET Web API backend a
 
 ## Tech Stack
 
-- **Backend**: .NET 10 Web API, Entity Framework Core
+- **Backend**: .NET 10 Web API, Entity Framework Core (Structured with Repositories, Services, and Helpers)
 - **Database**: SQL Server
 - **Frontend**: HTML/CSS, Bootstrap 5, Vanilla JavaScript
 - **Testing**: xUnit, Moq

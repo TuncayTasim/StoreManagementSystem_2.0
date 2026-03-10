@@ -14,6 +14,6 @@ namespace StoreManagementSystem.API.Models
 
         public decimal PriceSold { get; set; }
         public int QuantitySold { get; set; }
-        public string PaymentMethod { get; set; } = "Cash"; // Default
+        public string PaymentMethod { get; set; } = "Cash";
     }
 }

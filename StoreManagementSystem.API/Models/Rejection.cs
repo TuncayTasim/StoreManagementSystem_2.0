@@ -7,8 +7,6 @@ namespace StoreManagementSystem.API.Models
     {
         [Key]
         public int Id { get; set; }
-
-        // FKs to the source batch tables
         public int? WarehouseId { get; set; }
         public int? ShelfId { get; set; }
 

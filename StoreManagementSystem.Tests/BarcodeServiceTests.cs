@@ -1,3 +1,4 @@
+using StoreManagementSystem.API.Helpers;
 using StoreManagementSystem.API.Services;
 using Xunit;
 
@@ -5,18 +6,12 @@ namespace StoreManagementSystem.Tests
 {
     public class BarcodeServiceTests
     {
-        private readonly BarcodeService _service;
-
-        public BarcodeServiceTests()
-        {
-            _service = new BarcodeService();
-        }
 
         [Fact]
         public void GenerateEan13_ReturnsValidLength()
         {
             // Act
-            string barcode = _service.GenerateEan13();
+            string barcode = BarcodeGenerator.GenerateEan13();
 
             // Assert
             Assert.Equal(13, barcode.Length);
@@ -27,7 +22,7 @@ namespace StoreManagementSystem.Tests
         public void GenerateEan13_CalculatesValidCheckDigit()
         {
             // Act
-            string barcode = _service.GenerateEan13();
+            string barcode = BarcodeGenerator.GenerateEan13();
             string data = barcode.Substring(0, 12);
             int expectedCheck = int.Parse(barcode[12].ToString());
 
