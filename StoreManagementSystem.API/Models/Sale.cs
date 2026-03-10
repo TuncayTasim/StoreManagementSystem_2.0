@@ -13,7 +13,7 @@ namespace StoreManagementSystem.API.Models
         public Shelf? Shelf { get; set; }
 
         public decimal PriceSold { get; set; }
-        public int QuantitySold { get; set; }
+        public decimal QuantitySold { get; set; }
         public string PaymentMethod { get; set; } = "Cash";
     }
 }

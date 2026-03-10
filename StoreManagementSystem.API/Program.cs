@@ -34,6 +34,7 @@ builder.Services.AddScoped<IShelfService, ShelfService>();
 builder.Services.AddScoped<ISalesRepository, SalesRepository>();
 builder.Services.AddScoped<ISalesService, SalesService>();
 builder.Services.AddScoped<IRejectionRepository, RejectionRepository>();
+builder.Services.AddScoped<IRejectionService, RejectionService>();
 
 builder.Services.AddOpenApi();
 

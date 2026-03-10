@@ -22,8 +22,8 @@ namespace StoreManagementSystem.API.Models
         public string SKU { get; set; } = string.Empty;
         public string Barcode { get; set; } = string.Empty;
 
-        public int WarehouseQuantity { get; set; }
-        public int ShelfQuantity { get; set; }
+        public decimal WarehouseQuantity { get; set; }
+        public decimal ShelfQuantity { get; set; }
 
         public ICollection<Warehouse> WarehouseActions { get; set; } = new List<Warehouse>();
         public ICollection<Shelf> ShelfActions { get; set; } = new List<Shelf>();

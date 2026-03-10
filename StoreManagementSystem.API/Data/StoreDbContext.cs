@@ -34,6 +34,20 @@ namespace StoreManagementSystem.API.Data
                 .HasOne(s => s.RestockDetails)
                 .WithOne(r => r.Shelf)
                 .HasForeignKey<ShelfRestock>(r => r.ShelfId);
+            modelBuilder.Entity<Sale>().Property(x => x.QuantitySold).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Sale>().Property(x => x.PriceSold).HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<ShelfRestock>().Property(x => x.PriceSell).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<WarehouseRestock>().Property(x => x.PriceBought).HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Product>().Property(x => x.WarehouseQuantity).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Product>().Property(x => x.ShelfQuantity).HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Warehouse>().Property(x => x.Quantity).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Warehouse>().Property(x => x.CurrentQuantity).HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Shelf>().Property(x => x.Quantity).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Shelf>().Property(x => x.CurrentQuantity).HasColumnType("decimal(18,2)");
         }
     }
 }

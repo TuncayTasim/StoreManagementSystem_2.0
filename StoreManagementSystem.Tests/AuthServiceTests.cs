@@ -30,7 +30,7 @@ namespace StoreManagementSystem.Tests
         public async Task RegisterAsync_AddsUserAndReturnsConfirmationToken()
         {
             // Arrange
-            var dto = new UserRegisterDTO { UserName = "new", Email = "e@test.com", Password = "pw", FirstName = "F", LastName = "L", RoleId = 1 };
+            var dto = new UserRegisterDTO { UserName = "new", Email = "e@test.com", PhoneNumber = "1234567890", Password = "pw", FirstName = "F", LastName = "L", RoleId = 1 };
             _mockRepo.Setup(r => r.UserExistsAsync("new", "e@test.com")).ReturnsAsync(false);
 
             // Act

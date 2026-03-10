@@ -36,14 +36,15 @@ namespace StoreManagementSystem.API.Services
             var rejectionAction = new Warehouse
             {
                 ProductId = batch.ProductId,
-                ActionId = 4, 
+                ActionId = 4,
                 Quantity = -batch.CurrentQuantity,
-                CurrentQuantity = 0, 
+                CurrentQuantity = 0,
                 ActionDateTime = DateTime.Now,
             };
             await _repository.AddActionAsync(rejectionAction);
 
             product.WarehouseQuantity -= batch.CurrentQuantity;
+            batch.CurrentQuantity = 0;
 
             await _productRepository.UpdateAsync(product);
             await _repository.UpdateAsync(batch);
@@ -53,8 +54,7 @@ namespace StoreManagementSystem.API.Services
             await _rejectionRepository.SaveChangesAsync();
         }
 
-
-        public async Task RestockProductAsync(int productId, int quantity, decimal price, int daysToExpire)
+        public async Task RestockProductAsync(int productId, decimal quantity, decimal price, int daysToExpire)
         {
             var product = await _productRepository.GetByIdAsync(productId);
             if (product == null) throw new Exception("Product not found");

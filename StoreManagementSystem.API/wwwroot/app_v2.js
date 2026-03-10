@@ -41,7 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!currentUser) {
         showLogin();
     } else {
-        showDashboard();
+        const lastView = sessionStorage.getItem('currentView');
+        if (lastView === 'showProducts') showProducts();
+        else if (lastView === 'showInventory') showInventory();
+        else if (lastView === 'showSales') showSales();
+        else if (lastView === 'showWarehouseLogs') showWarehouseLogs();
+        else if (lastView === 'showShelfLogs') showShelfLogs();
+        else if (lastView === 'showRejectionsLog') showRejectionsLog();
+        else showDashboard();
     }
 });
 
@@ -50,21 +57,25 @@ function updateNav() {
     if (currentUser) {
         const roleId = parseInt(currentUser.roleId);
         let links = `
-            <li class="nav-item"><a class="nav-link" href="#" onclick="showDashboard()">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="showProducts()">Products</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="showInventory()">Inventory</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="sessionStorage.setItem('currentView', 'showDashboard'); showDashboard()">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="sessionStorage.setItem('currentView', 'showProducts'); showProducts()">Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="sessionStorage.setItem('currentView', 'showInventory'); showInventory()">Inventory</a></li>
         `;
 
         if (roleId === 1 || roleId === 4) {
-            links += `<li class="nav-item"><a class="nav-link" href="#" onclick="showSales()">Sales History</a></li>`;
+            links += `<li class="nav-item"><a class="nav-link" href="#" onclick="sessionStorage.setItem('currentView', 'showSales'); showSales()">Sales History</a></li>`;
         }
 
         if (roleId === 1 || roleId === 3) {
-            links += `<li class="nav-item"><a class="nav-link" href="#" onclick="showWarehouseLogs()">Warehouse Logs</a></li>`;
+            links += `<li class="nav-item"><a class="nav-link" href="#" onclick="sessionStorage.setItem('currentView', 'showWarehouseLogs'); showWarehouseLogs()">Warehouse Logs</a></li>`;
         }
 
         if (roleId === 1 || roleId === 2) {
-            links += `<li class="nav-item"><a class="nav-link" href="#" onclick="showShelfLogs()">Shelf Logs</a></li>`;
+            links += `<li class="nav-item"><a class="nav-link" href="#" onclick="sessionStorage.setItem('currentView', 'showShelfLogs'); showShelfLogs()">Shelf Logs</a></li>`;
+        }
+
+        if (roleId === 1 || roleId === 2 || roleId === 3) {
+            links += `<li class="nav-item"><a class="nav-link" href="#" onclick="sessionStorage.setItem('currentView', 'showRejectionsLog'); showRejectionsLog()">Rejections Log</a></li>`;
         }
 
         links += `<li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Logout (${currentUser.userName})</a></li>`;
@@ -178,6 +189,10 @@ function showRegister() {
                                 <input type="email" id="regEmail" class="form-control" required>
                             </div>
                             <div class="mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" id="regPhone" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label">Password</label>
                                 <input type="password" id="regPass" class="form-control" required>
                             </div>
@@ -204,10 +219,11 @@ function showRegister() {
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const dto = {
+            userName: document.getElementById('regUser').value,
             firstName: document.getElementById('regFirst').value,
             lastName: document.getElementById('regLast').value,
-            userName: document.getElementById('regUser').value,
             email: document.getElementById('regEmail').value,
+            phoneNumber: document.getElementById('regPhone').value,
             password: document.getElementById('regPass').value,
             roleId: parseInt(document.getElementById('regRole').value)
         };
@@ -302,7 +318,7 @@ async function showInventory() {
                         <h5>Restock Warehouse</h5>
                         <form id="restockForm">
                             <select id="restockId" class="form-select mb-2" required>${products.map(p => `<option value="${p.id}">${p.name} (W:${p.warehouseQuantity})</option>`).join('')}</select>
-                            <input type="number" id="restockQty" class="form-control mb-2" placeholder="Quantity" min="1" required>
+                            <input type="number" id="restockQty" class="form-control mb-2" placeholder="Quantity" min="0.01" step="any" required>
                             <input type="number" step="0.01" id="restockPrice" class="form-control mb-2" placeholder="Price" min="0.01" required>
                             <input type="number" id="restockExpire" class="form-control mb-2" placeholder="Days to Expire" min="1" required>
                             <button type="submit" class="btn btn-success w-100">Restock</button>
@@ -317,7 +333,7 @@ async function showInventory() {
                         <h5>Move to Shelf</h5>
                         <form id="moveForm">
                             <select id="moveId" class="form-select mb-2" required>${products.map(p => `<option value="${p.id}">${p.name} (W:${p.warehouseQuantity})</option>`).join('')}</select>
-                            <input type="number" id="moveQty" class="form-control mb-2" placeholder="Quantity" min="1" required>
+                            <input type="number" id="moveQty" class="form-control mb-2" placeholder="Quantity" min="0.01" step="any" required>
                             <input type="number" step="0.01" id="movePrice" class="form-control mb-2" placeholder="Sell Price" min="0.01" required>
                             <button type="submit" class="btn btn-info w-100">Move</button>
                         </form>
@@ -331,7 +347,7 @@ async function showInventory() {
                         <h5>Sell Product</h5>
                         <form id="sellForm">
                             <select id="sellId" class="form-select mb-2" required>${products.map(p => `<option value="${p.id}">${p.name} (S:${p.shelfQuantity})</option>`).join('')}</select>
-                            <input type="number" id="sellQty" class="form-control mb-2" placeholder="Quantity" min="1" required>
+                            <input type="number" id="sellQty" class="form-control mb-2" placeholder="Quantity" min="0.01" step="any" required>
                             <select id="sellPayment" class="form-select mb-2"><option value="Cash">Cash</option><option value="Card">Card</option></select>
                             <button type="submit" class="btn btn-danger w-100">Sell</button>
                         </form>
@@ -422,12 +438,46 @@ async function showShelfLogs(productIdFilter = null) {
     } catch (err) { content.innerHTML = `Error: ${err.message}`; }
 }
 
+async function showRejectionsLog() {
+    const content = document.getElementById('content');
+    content.innerHTML = `<h2>Rejections Log</h2><p>Loading...</p>`;
+    try {
+        const res = await fetch(`${API_URL}/inventory/rejections`, { headers: getAuthHeaders() });
+        if (!res.ok) { await showErrorAlert(res, 'Error loading rejections'); return; }
+        const rejections = await res.json();
+        content.innerHTML = `
+            <h2>Rejections Log</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Warehouse ID</th>
+                        <th>Shelf ID</th>
+                        <th>Quantity</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rejections.length > 0 ? rejections.map(r => `
+                        <tr>
+                            <td>${r.id}</td>
+                            <td>${r.warehouseId || '-'}</td>
+                            <td>${r.shelfId || '-'}</td>
+                            <td>${r.quantity}</td>
+                            <td>${r.reason}</td>
+                        </tr>
+                    `).join('') : '<tr><td colspan="5">No rejections found.</td></tr>'}
+                </tbody>
+            </table>`;
+    } catch (err) { content.innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`; }
+}
+
 function showDashboard() {
     document.getElementById('content').innerHTML = `<h2>Dashboard</h2><p>Welcome back, <b>${currentUser.userName}</b>!</p>`;
 }
 
 async function showBatchManager(productId, productName) {
-    const modal = new bootstrap.Modal(document.getElementById('appModal'));
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('appModal'));
     document.getElementById('appModalTitle').textContent = `Batches: ${productName}`;
     document.getElementById('appModalBody').innerHTML = 'Loading...';
     modal.show();
