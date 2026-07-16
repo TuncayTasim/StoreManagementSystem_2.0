@@ -20,7 +20,7 @@ A comprehensive store management application built with a .NET Web API backend a
 
 - **Backend**: .NET 10 Web API, Entity Framework Core (Structured with Repositories, Services, and Helpers)
 - **Database**: SQL Server
-- **Frontend**: HTML/CSS, Bootstrap 5, Vanilla JavaScript
+- **Frontend**: Angular
 - **Testing**: xUnit, Moq
 
 ## Setup Instructions
@@ -31,11 +31,15 @@ A comprehensive store management application built with a .NET Web API backend a
     - Run migrations: `dotnet ef database update --project StoreManagementSystem.API`.
 3.  **Configure Email**:
     - Ensure `EmailSettings:Password` in `appsettings.json` contains a valid Gmail information`.
+    - Have in mind that the password field should contain a generated password from gooogle for example with this pattern: xxxx xxxx xxxx xxxx.
+    - For more info search: App Password Google
 4.  **Run the Application**:
     ```powershell
     dotnet run --project StoreManagementSystem.API/StoreManagementSystem.API.csproj
     ```
-5.  **Access**: Open the local URL (e.g., `https://localhost:5001`) in your browser.
+5.  **Access**:
+    - For testing withouth the angular app: https://localhost:7274/scalar; http://localhost:5081/scalar. Run the project without the need of running the Angular app.
+    - For managing the whole app: Run the BE project and in the FE directory enter "npm start" in the console to run the FE part of the application and manage the whole app.
 
 ## Testing
 

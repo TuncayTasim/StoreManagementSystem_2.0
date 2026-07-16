@@ -1,0 +1,65 @@
+<!-- mat-card provides a Material Design surface for the login form -->
+<mat-card class="login-card">
+  <mat-card-header>
+    <mat-card-title><h2>Login</h2></mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Reactive form bound to the FormGroup defined in the component class -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- Username field -->
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="userName" autocomplete="username" />
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-error *ngIf="loginForm.controls.userName.hasError('required')">
+          Username is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Password field with visibility toggle -->
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hidePassword ? 'password' : 'text'"
+          autocomplete="current-password"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword = !hidePassword"
+        >
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="loginForm.controls.password.hasError('required')">
+          Password is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Submit button — disabled when the form is invalid -->
+      <div class="button-section">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="loginForm.invalid"
+        >
+          Login
+        </button>
+      </div>
+    </form>
+
+    <!-- Navigation links to related auth pages -->
+    <div class="links-section">
+      <a routerLink="/register">Don't have an account? Register</a>
+      <a routerLink="/forgot-password">Forgot password?</a>
+      <a routerLink="/confirm-email">Got a token? Confirm Email</a>
+      <a routerLink="/reset-password">Got a token? Reset Password</a>
+    </div>
+  </mat-card-content>
+</mat-card>

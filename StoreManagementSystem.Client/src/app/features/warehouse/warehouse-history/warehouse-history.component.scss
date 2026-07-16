@@ -1,0 +1,21 @@
+/* Warehouse History — full-width table styles */
+
+.container {
+  padding: 24px;
+}
+
+.product-filter {
+  width: 300px;
+  margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+}
+
+.empty-state {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.54);
+  margin-top: 24px;
+  font-style: italic;
+}

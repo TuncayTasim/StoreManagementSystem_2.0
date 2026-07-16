@@ -1,0 +1,16 @@
+/* Rejection List — full-width table styles */
+
+.container {
+  padding: 24px;
+}
+
+table {
+  width: 100%;
+}
+
+.empty-state {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.54);
+  margin-top: 24px;
+  font-style: italic;
+}

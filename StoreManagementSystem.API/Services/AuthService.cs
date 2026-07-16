@@ -1,11 +1,11 @@
 using StoreManagementSystem.API.Models;
-using StoreManagementSystem.API.Repositories;
 using StoreManagementSystem.API.DTOs;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using StoreManagementSystem.API.Helpers;
+using StoreManagementSystem.API.Interfaces;
 
 namespace StoreManagementSystem.API.Services
 {
@@ -108,10 +108,23 @@ namespace StoreManagementSystem.API.Services
             return true;
         }
 
+        public async Task<bool> ChangePasswordAsync(int userId, ChangePasswordDTO dto)
+        {
+            var user = await _repository.GetUserByIdAsync(userId);
+            if (user == null) return false;
+
+            if (!BCrypt.Net.BCrypt.Verify(dto.OldPassword, user.PasswordHash))
+                return false;
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            await _repository.SaveChangesAsync();
+            return true;
+        }
+
         private string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtKey = _configuration["Jwt:Key"] ?? "DefaultFallbackKeyWhichShouldNotBeUsed!";
+            var jwtKey = _configuration["Jwt:Key"];
             var key = Encoding.ASCII.GetBytes(jwtKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {

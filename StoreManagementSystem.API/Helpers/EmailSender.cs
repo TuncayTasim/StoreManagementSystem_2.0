@@ -7,7 +7,7 @@ namespace StoreManagementSystem.API.Helpers
     {
         public static async Task SendEmailAsync(IConfiguration configuration, string email, string subject, string message)
         {
-            var fromEmail = configuration["EmailSettings:FromEmail"] ?? "tuncaytasim24@gmail.com";
+            var fromEmail = configuration["EmailSettings:FromEmail"];
             var password = configuration["EmailSettings:Password"];
 
             if (string.IsNullOrEmpty(password)) throw new Exception("Email password missing.");

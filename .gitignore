@@ -1,6 +1,7 @@
 ## [Our specific secrets]
 StoreManagementSystem.API/appsettings.json
 StoreManagementSystem.API/appsettings.Development.json
+CLAUDE.md
 *.txt
 *.log
 
@@ -22,3 +23,8 @@ obj/
 
 ## [Folders]
 .gemini/
+
+## [Angular Client]
+node_modules/
+StoreManagementSystem.Client/dist/
+StoreManagementSystem.Client/.angular/

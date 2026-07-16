@@ -13,5 +13,8 @@ namespace StoreManagementSystem.API.Models
         [ForeignKey("Warehouse")]
         public int WarehouseId { get; set; }
         public Warehouse? Warehouse { get; set; }
+
+        [NotMapped]
+        public DateTime? ExpirationDate => Warehouse?.ActionDateTime.AddDays(DaysToExpire);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
+using StoreManagementSystem.API.Interfaces;
 
 namespace StoreManagementSystem.API.Services
 {
@@ -23,41 +24,50 @@ namespace StoreManagementSystem.API.Services
 
             foreach (var r in rejections)
             {
-                decimal qty = 0;
+                string sourceType = "Unknown";
+                string productName = "Unknown";
+                DateTime? rejectedAt = null;
+
                 if (r.ShelfId.HasValue)
                 {
-                    var batch = await _context.Shelves.FindAsync(r.ShelfId.Value);
+                    var batch = await _context.Shelves.Include(s => s.Product).FirstOrDefaultAsync(s => s.Id == r.ShelfId.Value);
                     if (batch != null)
                     {
+                        sourceType = "Shelf";
+                        productName = batch.Product?.Name ?? "Unknown";
+
                         var rejectAction = await _context.Shelves
                             .Where(s => s.ProductId == batch.ProductId && s.ActionId == 4 && s.ActionDateTime >= batch.ActionDateTime)
                             .OrderBy(s => s.ActionDateTime)
                             .FirstOrDefaultAsync();
                         
-                        if (rejectAction != null) qty = Math.Abs(rejectAction.Quantity);
+                        if (rejectAction != null) rejectedAt = rejectAction.ActionDateTime;
                     }
                 }
                 else if (r.WarehouseId.HasValue)
                 {
-                    var batch = await _context.Warehouses.FindAsync(r.WarehouseId.Value);
+                    var batch = await _context.Warehouses.Include(w => w.Product).FirstOrDefaultAsync(w => w.Id == r.WarehouseId.Value);
                     if (batch != null)
                     {
+                        sourceType = "Warehouse";
+                        productName = batch.Product?.Name ?? "Unknown";
+
                         var rejectAction = await _context.Warehouses
                             .Where(w => w.ProductId == batch.ProductId && w.ActionId == 4 && w.ActionDateTime >= batch.ActionDateTime)
                             .OrderBy(w => w.ActionDateTime)
                             .FirstOrDefaultAsync();
 
-                        if (rejectAction != null) qty = Math.Abs(rejectAction.Quantity);
+                        if (rejectAction != null) rejectedAt = rejectAction.ActionDateTime;
                     }
                 }
 
                 result.Add(new
                 {
                     id = r.Id,
-                    warehouseId = r.WarehouseId,
-                    shelfId = r.ShelfId,
+                    sourceType = sourceType,
                     reason = r.Reason,
-                    quantity = qty
+                    rejectedAt = rejectedAt ?? DateTime.Now,
+                    productName = productName
                 });
             }
 

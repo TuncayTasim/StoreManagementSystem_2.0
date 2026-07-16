@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="header">
+    <h2>Products</h2>
+    <button mat-raised-button color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon> Add Product
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="products" class="mat-elevation-z2">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let p">{{ p.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Description</th>
+      <td mat-cell *matCellDef="let p">{{ p.description }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="categoryId">
+      <th mat-header-cell *matHeaderCellDef>Category</th>
+      <td mat-cell *matCellDef="let p">{{ p.category?.name || p.categoryId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="supplierId">
+      <th mat-header-cell *matHeaderCellDef>Supplier</th>
+      <td mat-cell *matCellDef="let p">{{ p.supplier?.name || p.supplierId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="sku">
+      <th mat-header-cell *matHeaderCellDef>SKU</th>
+      <td mat-cell *matCellDef="let p">{{ p.sku }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="barcode">
+      <th mat-header-cell *matHeaderCellDef>Barcode</th>
+      <td mat-cell *matCellDef="let p">{{ p.barcode }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="warehouseQuantity">
+      <th mat-header-cell *matHeaderCellDef>Warehouse Qty</th>
+      <td mat-cell *matCellDef="let p">{{ p.warehouseQuantity }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="shelfQuantity">
+      <th mat-header-cell *matHeaderCellDef>Shelf Qty</th>
+      <td mat-cell *matCellDef="let p">{{ p.shelfQuantity }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let p">
+        <button mat-icon-button color="primary" (click)="openEditDialog(p)" matTooltip="Edit">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteProduct(p.id)" matTooltip="Delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  @if (products.length === 0) {
+    <p class="empty-message">No products found. Click "Add Product" to create one.</p>
+  }
+</div>

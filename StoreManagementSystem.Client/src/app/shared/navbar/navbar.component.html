@@ -1,0 +1,71 @@
+<!-- The toolbar is only shown when the user is logged in -->
+@if (auth.isLoggedIn()) {
+  <mat-toolbar color="primary">
+    <span class="brand" routerLink="/dashboard">StoreSystem</span>
+
+    <!-- Spacer pushes nav links to the right -->
+    <span class="spacer"></span>
+
+    <button mat-button routerLink="/dashboard" routerLinkActive="active-link">
+      <mat-icon>dashboard</mat-icon> Dashboard
+    </button>
+
+    <button mat-button routerLink="/products" routerLinkActive="active-link">
+      <mat-icon>inventory_2</mat-icon> Products
+    </button>
+
+    <!-- Warehouse menu — visible to Admin (1) and Warehouse Manager (3) -->
+    @if (hasRole(1, 3)) {
+      <button mat-button [matMenuTriggerFor]="warehouseMenu">
+        <mat-icon>warehouse</mat-icon> Warehouse
+      </button>
+      <mat-menu #warehouseMenu="matMenu">
+        <button mat-menu-item routerLink="/warehouse/restock">Restock</button>
+        <button mat-menu-item routerLink="/warehouse/batches">Batches</button>
+        <button mat-menu-item routerLink="/warehouse/history">History</button>
+      </mat-menu>
+    }
+
+    <!-- Shelf menu — visible to Admin (1) and Shelf Manager (2) -->
+    @if (hasRole(1, 2)) {
+      <button mat-button [matMenuTriggerFor]="shelfMenu">
+        <mat-icon>shelves</mat-icon> Shelf
+      </button>
+      <mat-menu #shelfMenu="matMenu">
+        <button mat-menu-item routerLink="/shelf/move">Move to Shelf</button>
+        <button mat-menu-item routerLink="/shelf/batches">Batches</button>
+        <button mat-menu-item routerLink="/shelf/history">History</button>
+      </mat-menu>
+    }
+
+    <!-- Sales menu — visible to Admin (1) and Sales Manager (4) -->
+    @if (hasRole(1, 4)) {
+      <button mat-button [matMenuTriggerFor]="salesMenu">
+        <mat-icon>point_of_sale</mat-icon> Sales
+      </button>
+      <mat-menu #salesMenu="matMenu">
+        <button mat-menu-item routerLink="/sales/sell">Process Sale</button>
+        <button mat-menu-item routerLink="/sales/history">History</button>
+      </mat-menu>
+    }
+
+    <button mat-button routerLink="/rejections" routerLinkActive="active-link">
+      <mat-icon>block</mat-icon> Rejections
+    </button>
+
+    <!-- User Menu for Change Password and Logout -->
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="User Account">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item routerLink="/change-password">
+        <mat-icon>password</mat-icon>
+        <span>Change Password</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+}

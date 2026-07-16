@@ -1,6 +1,7 @@
 using StoreManagementSystem.API.Models;
 using StoreManagementSystem.API.Data;
 using Microsoft.EntityFrameworkCore;
+using StoreManagementSystem.API.Interfaces;
 
 namespace StoreManagementSystem.API.Repositories
 {
@@ -24,6 +25,11 @@ namespace StoreManagementSystem.API.Repositories
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User?> GetUserByIdAsync(int id)
+        {
+            return await _context.Users.FindAsync(id);
         }
 
         public async Task<bool> UserExistsAsync(string userName, string email)

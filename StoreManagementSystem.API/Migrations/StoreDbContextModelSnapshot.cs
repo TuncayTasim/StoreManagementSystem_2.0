@@ -139,6 +139,28 @@ namespace StoreManagementSystem.API.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            Name = "Shelf Manager"
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            Name = "Warehouse Manager"
+                        },
+                        new
+                        {
+                            RoleId = 4,
+                            Name = "Sales Manager"
+                        });
                 });
 
             modelBuilder.Entity("StoreManagementSystem.API.Models.Sale", b =>

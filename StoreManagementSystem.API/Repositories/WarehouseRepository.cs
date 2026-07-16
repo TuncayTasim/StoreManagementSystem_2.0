@@ -1,5 +1,6 @@
 using StoreManagementSystem.API.Models;
 using Microsoft.EntityFrameworkCore;
+using StoreManagementSystem.API.Interfaces;
 
 namespace StoreManagementSystem.API.Repositories
 {
@@ -16,6 +17,7 @@ namespace StoreManagementSystem.API.Repositories
                 .Where(w => w.ProductId == productId)
                 .Include(w => w.ActionType)
                 .Include(w => w.Product)
+                .Include(w => w.RestockDetails)
                 .OrderByDescending(w => w.ActionDateTime)
                 .ToListAsync();
         }
@@ -25,6 +27,7 @@ namespace StoreManagementSystem.API.Repositories
             var query = _context.Warehouses
                 .Include(w => w.ActionType)
                 .Include(w => w.Product)
+                .Include(w => w.RestockDetails)
                 .AsQueryable();
 
             if (productId.HasValue)
@@ -40,6 +43,7 @@ namespace StoreManagementSystem.API.Repositories
         public async Task<IEnumerable<Warehouse>> GetAvailableBatchesAsync(int productId)
         {
             return await _context.Warehouses
+                .Include(w => w.RestockDetails)
                 .Where(w => w.ProductId == productId && w.ActionId == 1 && w.CurrentQuantity > 0)
                 .OrderBy(w => w.ActionDateTime)
                 .ToListAsync();

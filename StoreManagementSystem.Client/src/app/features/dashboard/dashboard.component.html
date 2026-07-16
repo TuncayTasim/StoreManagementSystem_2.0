@@ -1,0 +1,22 @@
+<div class="dashboard-container">
+  <h1>Welcome, {{ user?.userName }}!</h1>
+  <p class="subtitle">What would you like to do today?</p>
+
+  <div class="card-grid">
+    <!-- *ngFor loops through the cards array and renders one card per item -->
+    <!-- *ngIf checks role-based visibility -->
+    @for (card of cards; track card.title) {
+      @if (canSee(card.roles)) {
+        <mat-card class="action-card" [routerLink]="card.route">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="card-icon">{{ card.icon }}</mat-icon>
+            <mat-card-title>{{ card.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ card.description }}</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    }
+  </div>
+</div>

@@ -48,6 +48,14 @@ namespace StoreManagementSystem.API.Data
 
             modelBuilder.Entity<Shelf>().Property(x => x.Quantity).HasColumnType("decimal(18,2)");
             modelBuilder.Entity<Shelf>().Property(x => x.CurrentQuantity).HasColumnType("decimal(18,2)");
+
+            // Seed Roles
+            modelBuilder.Entity<Role>().HasData(
+                new Role { RoleId = 1, Name = "Admin" },
+                new Role { RoleId = 2, Name = "Shelf Manager" },
+                new Role { RoleId = 3, Name = "Warehouse Manager" },
+                new Role { RoleId = 4, Name = "Sales Manager" }
+            );
         }
     }
 }

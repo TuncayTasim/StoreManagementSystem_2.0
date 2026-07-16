@@ -1,6 +1,6 @@
 using StoreManagementSystem.API.Helpers;
+using StoreManagementSystem.API.Interfaces;
 using StoreManagementSystem.API.Models;
-using StoreManagementSystem.API.Repositories;
 
 namespace StoreManagementSystem.API.Services
 {

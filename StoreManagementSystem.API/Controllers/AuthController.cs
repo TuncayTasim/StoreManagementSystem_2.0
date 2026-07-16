@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StoreManagementSystem.API.DTOs;
-using StoreManagementSystem.API.Services;
+using StoreManagementSystem.API.Interfaces;
 
 namespace StoreManagementSystem.API.Controllers
 {
@@ -87,6 +87,26 @@ namespace StoreManagementSystem.API.Controllers
                 var result = await _service.ResetPasswordAsync(dto);
                 if (!result) return BadRequest("Invalid token or passwords do not match");
                 return Ok("Password reset successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Microsoft.AspNetCore.Authorization.Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO dto)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                    return Unauthorized("Invalid user token");
+
+                var result = await _service.ChangePasswordAsync(userId, dto);
+                if (!result) return BadRequest("Invalid old password or error updating password");
+                return Ok("Password changed successfully");
             }
             catch (Exception ex)
             {
