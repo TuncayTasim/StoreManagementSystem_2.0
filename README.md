@@ -30,7 +30,7 @@ A comprehensive store management application built with a .NET Web API backend a
     - Update `appsettings.json` with your SQL Server connection string.
     - Run migrations: `dotnet ef database update --project StoreManagementSystem.API`.
 3.  **Configure Email**:
-    - Ensure `EmailSettings:Password` in `appsettings.json` contains a valid Gmail App Password for `tuncaytasim24@gmail.com`.
+    - Ensure `EmailSettings:Password` in `appsettings.json` contains a valid Gmail information`.
 4.  **Run the Application**:
     ```powershell
     dotnet run --project StoreManagementSystem.API/StoreManagementSystem.API.csproj
