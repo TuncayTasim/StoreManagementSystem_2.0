@@ -1,19 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StoreManagementSystem.API.Models
+namespace StoreManagementSystem.API.Data.Entities
 {
-    public class Sale
+    public class ShelfRestock
     {
         [Key]
         public int Id { get; set; }
+        public decimal PriceSell { get; set; }
 
         [ForeignKey("Shelf")]
         public int ShelfId { get; set; }
         public Shelf? Shelf { get; set; }
-
-        public decimal PriceSold { get; set; }
-        public decimal QuantitySold { get; set; }
-        public string PaymentMethod { get; set; } = "Cash";
     }
 }

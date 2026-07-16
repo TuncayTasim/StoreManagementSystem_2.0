@@ -1,4 +1,4 @@
-using StoreManagementSystem.API.Models;
+using StoreManagementSystem.API.Data.Entities;
 
 namespace StoreManagementSystem.API.Interfaces
 {

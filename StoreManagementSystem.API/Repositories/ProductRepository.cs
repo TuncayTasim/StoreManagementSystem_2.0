@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StoreManagementSystem.API.Data;
+using StoreManagementSystem.API.Data.Entities;
 using StoreManagementSystem.API.Interfaces;
-using StoreManagementSystem.API.Models;
 
 namespace StoreManagementSystem.API.Repositories
 {

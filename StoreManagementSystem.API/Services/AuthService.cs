@@ -1,4 +1,3 @@
-using StoreManagementSystem.API.Models;
 using StoreManagementSystem.API.DTOs;
 using System.Security.Claims;
 using System.Text;
@@ -6,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using StoreManagementSystem.API.Helpers;
 using StoreManagementSystem.API.Interfaces;
+using StoreManagementSystem.API.Data.Entities;
 
 namespace StoreManagementSystem.API.Services
 {

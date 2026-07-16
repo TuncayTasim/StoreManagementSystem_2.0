@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using StoreManagementSystem.API.Models;
 using StoreManagementSystem.API.Services;
 using Microsoft.AspNetCore.Authorization;
+using StoreManagementSystem.API.Data.Entities;
 
 namespace StoreManagementSystem.API.Controllers
 {

@@ -1,6 +1,6 @@
 using Moq;
+using StoreManagementSystem.API.Data.Entities;
 using StoreManagementSystem.API.Interfaces;
-using StoreManagementSystem.API.Models;
 using StoreManagementSystem.API.Services;
 using Xunit;
 

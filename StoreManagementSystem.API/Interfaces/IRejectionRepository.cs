@@ -1,5 +1,5 @@
+using StoreManagementSystem.API.Data.Entities;
 using StoreManagementSystem.API.DTOs;
-using StoreManagementSystem.API.Models;
 
 namespace StoreManagementSystem.API.Interfaces
 {

@@ -1,11 +1,11 @@
 using Moq;
-using StoreManagementSystem.API.Models;
 using StoreManagementSystem.API.Services;
 using StoreManagementSystem.API.DTOs;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 using System.Threading.Tasks;
 using StoreManagementSystem.API.Interfaces;
+using StoreManagementSystem.API.Data.Entities;
 
 namespace StoreManagementSystem.Tests
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace StoreManagementSystem.API.Models
+namespace StoreManagementSystem.API.Data.Entities
 {
     public class ActionType
     {

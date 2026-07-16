@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using StoreManagementSystem.API.Data;
+using StoreManagementSystem.API.Data.Entities;
 using StoreManagementSystem.API.DTOs;
 using StoreManagementSystem.API.Interfaces;
-using StoreManagementSystem.API.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

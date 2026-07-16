@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StoreManagementSystem.API.Models
+namespace StoreManagementSystem.API.Data.Entities
 {
     public class Rejection
     {
