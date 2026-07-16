@@ -38,8 +38,8 @@ builder.Services.AddScoped<IRejectionService, RejectionService>();
 
 builder.Services.AddOpenApi();
 
-var jwtKey = builder.Configuration["Jwt:Key"] ?? "DefaultFallbackKeyWhichShouldNotBeUsed!";
-var key = Encoding.ASCII.GetBytes(jwtKey);
+var jwtKey = builder.Configuration["Jwt:Key"];
+var key = Encoding.UTF8.GetBytes(jwtKey);
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
