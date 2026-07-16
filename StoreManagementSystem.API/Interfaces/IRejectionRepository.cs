@@ -1,6 +1,5 @@
+using StoreManagementSystem.API.DTOs;
 using StoreManagementSystem.API.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace StoreManagementSystem.API.Interfaces
 {
@@ -8,6 +7,8 @@ namespace StoreManagementSystem.API.Interfaces
     {
         Task AddRejectionAsync(Rejection rejection);
         Task<IEnumerable<Rejection>> GetAllRejectionsAsync();
+        Task<RejectionExternalInfoDTO> GetShelfBatch(Rejection r, string sourceType, string productName, DateTime? rejectedAt);
+        Task<RejectionExternalInfoDTO> GetWarehouseBatch(Rejection r, string sourceType, string productName, DateTime? rejectedAt);
         Task SaveChangesAsync();
     }
 }
