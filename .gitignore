@@ -28,3 +28,7 @@ obj/
 node_modules/
 StoreManagementSystem.Client/dist/
 StoreManagementSystem.Client/.angular/
+
+## [Docker]
+docker-compose.override.yml
+appsettings.Docker.json

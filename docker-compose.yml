@@ -1,0 +1,47 @@
+services:
+  # ---------------------------------------------------------------------------
+  # SQL Server Database
+  # ---------------------------------------------------------------------------
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: store-sqlserver
+    environment:
+      # EULA acceptance is required to run SQL Server in a container
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "StoreAdmin@123"
+    ports:
+      - "1433:1433"
+    volumes:
+      # Persist database data so it survives container restarts
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      # Check if SQL Server is ready to accept connections
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "StoreAdmin@123" -C -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # StoreManagementSystem Application (API + Angular)
+  # ---------------------------------------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: store-app
+    ports:
+      - "8080:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=StoreManagementSystem;User Id=sa;Password=StoreAdmin@123;TrustServerCertificate=True"
+
+      Jwt__Key: "verysecretandstrongkeythatnoonecanhackbabe"
+
+      EmailSettings__FromEmail: "tuncaytasim24@gmail.com"
+      EmailSettings__Password: "xhxe fgpz kbqb llfo"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+volumes:
+  sqlserver-data:
