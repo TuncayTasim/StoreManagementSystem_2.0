@@ -20,7 +20,7 @@ namespace StoreManagementSystem.API.Services
             _configuration = configuration;
         }
 
-        public async Task<UserResponseDTO?> RegisterAsync(UserRegisterDTO dto)
+        public async Task<UserLoginResponseDTO?> RegisterAsync(UserRegisterDTO dto)
         {
             if (await _repository.UserExistsAsync(dto.UserName, dto.Email)) return null;
 
@@ -43,15 +43,10 @@ namespace StoreManagementSystem.API.Services
             string message = $"<h1>Confirm Your Email</h1><p>Welcome {user.FirstName}!</p><p>Your confirmation token is: <strong>{user.ActionToken}</strong></p>";
             await EmailSender.SendEmailAsync(_configuration, user.Email, "Confirm your email - Store System", message);
 
-            return new UserResponseDTO { 
-                UserId = user.UserId, 
-                UserName = user.UserName, 
-                Token = "CONFIRMATION_SENT",
-                RoleId = user.RoleId
-            };
+            return new UserLoginResponseDTO(user.UserId, user.UserName, "CONFIRMATION_SENT", user.RoleId);
         }
 
-        public async Task<UserResponseDTO?> LoginAsync(UserLoginDTO dto)
+        public async Task<UserLoginResponseDTO?> LoginAsync(UserLoginDTO dto)
         {
             var user = await _repository.GetUserByUserNameAsync(dto.UserName);
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash)) return null;
@@ -61,12 +56,7 @@ namespace StoreManagementSystem.API.Services
                 throw new Exception("EMAIL_NOT_CONFIRMED");
             }
 
-            return new UserResponseDTO { 
-                UserId = user.UserId, 
-                UserName = user.UserName, 
-                Token = GenerateJwtToken(user),
-                RoleId = user.RoleId
-            };
+            return new UserLoginResponseDTO(user.UserId, user.UserName, GenerateJwtToken(user), user.RoleId);
         }
 
         public async Task<bool> ConfirmEmailAsync(string token)

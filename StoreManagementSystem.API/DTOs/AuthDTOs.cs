@@ -1,45 +1,15 @@
 namespace StoreManagementSystem.API.DTOs
 {
-    public class UserRegisterDTO
-    {
-        public string UserName { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string PhoneNumber { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public int RoleId { get; set; }
-    }
+    public record UserRegisterDTO(string UserName, string FirstName, string LastName, string Email, string PhoneNumber, string Password, int RoleId);
 
-    public class UserLoginDTO
-    {
-        public string UserName { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-    }
+    public record UserLoginDTO(string UserName, string Password);
 
-    public class UserResponseDTO
-    {
-        public int UserId { get; set; }
-        public string UserName { get; set; } = string.Empty;
-        public string Token { get; set; } = string.Empty;
-        public int RoleId { get; set; }
-    }
+    public record UserLoginResponseDTO(int UserId, string UserName, string Token, int RoleId);
 
-    public class ForgotPasswordDTO
-    {
-        public string Email { get; set; } = string.Empty;
-    }
+    public record ForgotPasswordDTO(string Email);
 
-    public class ResetPasswordDTO
-    {
-        public string Token { get; set; } = string.Empty;
-        public string NewPassword { get; set; } = string.Empty;
-        public string ConfirmPassword { get; set; } = string.Empty;
-    }
+    public record ResetPasswordDTO(string Token, string NewPassword, string ConfirmPassword);
 
-    public class ChangePasswordDTO
-    {
-        public string OldPassword { get; set; } = string.Empty;
-        public string NewPassword { get; set; } = string.Empty;
-    }
+    public record ChangePasswordDTO(string OldPassword, string NewPassword);
+    
 }

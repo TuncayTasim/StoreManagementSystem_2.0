@@ -4,8 +4,8 @@ namespace StoreManagementSystem.API.Interfaces
 {
     public interface IAuthService
     {
-        Task<UserResponseDTO?> RegisterAsync(UserRegisterDTO dto);
-        Task<UserResponseDTO?> LoginAsync(UserLoginDTO dto);
+        Task<UserLoginResponseDTO?> RegisterAsync(UserRegisterDTO dto);
+        Task<UserLoginResponseDTO?> LoginAsync(UserLoginDTO dto);
         Task<bool> ConfirmEmailAsync(string token);
         Task<bool> ForgotPasswordAsync(string email);
         Task<bool> ResetPasswordAsync(ResetPasswordDTO dto);

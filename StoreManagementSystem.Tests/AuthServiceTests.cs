@@ -30,7 +30,7 @@ namespace StoreManagementSystem.Tests
         public async Task RegisterAsync_AddsUserAndReturnsConfirmationToken()
         {
             // Arrange
-            var dto = new UserRegisterDTO { UserName = "new", Email = "e@test.com", PhoneNumber = "1234567890", Password = "pw", FirstName = "F", LastName = "L", RoleId = 1 };
+            var dto = new UserRegisterDTO("new", "e@test.com", "1234567890", "pw", "F", "L", 1);
             _mockRepo.Setup(r => r.UserExistsAsync("new", "e@test.com")).ReturnsAsync(false);
 
             // Act
@@ -50,7 +50,7 @@ namespace StoreManagementSystem.Tests
             _mockRepo.Setup(r => r.GetUserByUserNameAsync("u")).ReturnsAsync(user);
 
             // Act
-            var result = await _service.LoginAsync(new UserLoginDTO { UserName = "u", Password = "pw" });
+            var result = await _service.LoginAsync(new UserLoginDTO("u", "pw"));
 
             // Assert
             Assert.NotNull(result);
@@ -65,7 +65,7 @@ namespace StoreManagementSystem.Tests
             _mockRepo.Setup(r => r.GetUserByUserNameAsync("u")).ReturnsAsync(user);
 
             // Act & Assert
-            await Assert.ThrowsAsync<System.Exception>(() => _service.LoginAsync(new UserLoginDTO { UserName = "u", Password = "pw" }));
+            await Assert.ThrowsAsync<System.Exception>(() => _service.LoginAsync(new UserLoginDTO("u", "pw")));
         }
     }
 }
